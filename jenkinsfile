@@ -1,7 +1,7 @@
 node {
    stage('Preparation') {
       echo 'Preparing...'
-      git branch: 'main', credentialsId: 'rick', url: 'git@github.com:xieqf/ida-jenkins.git'
+      git branch: 'main', credentialsId: 'gh-ssh-key', url: 'git@github.com:sdc-china/ida-jenkins.git'
       echo 'Clean'
       sh '''
       rm -rf *.html

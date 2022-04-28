@@ -1,0 +1,38 @@
+pipeline {
+	agent any
+	
+	parameters{
+		string(name: 'IDA_URL', defaultValue: 'https://localhost:8443/ida', description: 'The IDA URL')
+		string(name: 'CHECKSTYLE_PIPELINE_ID', defaultValue: '', description: 'The IDA pipeline ID')
+		string(name: 'USER_TOKEN', defaultValue: '', description: 'The IDA user token')
+	}
+	
+	stages {
+	
+		stage('Preparation') {
+			steps {
+				checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'refs/tags/master']], userRemoteConfigs: [[credentialsId: 'gh-ssh-key', url: 'git@github.com:sdc-china/ida-jenkins.git']]]
+				sh '''
+				rm -rf *.html
+				'''
+			}
+		}
+		
+		stage('Trigger IDA Pipeline') {
+			steps {
+				echo 'Trigger IDA Pipeline...'
+				try {
+					sh '''chmod +x pipeline.sh
+					./pipeline.sh "${IDA_URL}" ${CHECKSTYLE_PIPELINE_ID} "${USER_TOKEN}" checkstyle
+					'''
+				} catch (e) {
+					echo "IDA Checkstyle Pipeline failed"
+					throw e
+				} finally {
+					
+				}
+			}
+		}	
+	}
+	
+}
