@@ -13,8 +13,8 @@ fi;
 if [ "$INTERVAL" = "" ] ; then
 	export INTERVAL=10
 fi;
-
-BUILD_RESULT=$(curl -X POST ${IDA_HOST}/rest/v1/pipeline/build?pipelineName=${PIPELINE_NAME} -k --data-urlencode "userToken=${USER_TOKEN}")
+echo "${IDA_HOST}/rest/v1/pipeline/build?pipelineName=${PIPELINE_NAME}"
+BUILD_RESULT=$(curl -X POST "${IDA_HOST}/rest/v1/pipeline/build?pipelineName=${PIPELINE_NAME}" -k --data-urlencode "userToken=${USER_TOKEN}")
 echo $BUILD_RESULT
 BUILD_ID="$(cut -d',' -f2 <<<"$BUILD_RESULT")"
 BUILD_ID="$(cut -d':' -f2 <<<"$BUILD_ID")"
