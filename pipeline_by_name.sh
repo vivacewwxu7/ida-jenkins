@@ -25,23 +25,23 @@ until [ $num -lt 1 ]
 do
     echo "Waiting for pipeline build"
 	sleep $INTERVAL
-	BUILD_STATUS=$(curl ${IDA_HOST}/rest/v1/builds/${BUILD_ID} -k)
+	BUILD_STATUS=$(curl ${IDA_HOST}/rest/v1/pipeline/builds/${BUILD_ID} -k)
 	echo "The build status is $BUILD_STATUS"
-	if [[ $BUILD_STATUS != *"RUNNING"* ]];
+	if [[ $BUILD_STATUS != *"\"status\":\"RUNNING\""* ]];
 	then
 		break
 	fi
 	num=`expr $num + 1`
 done
 
-
-BUILD_REPORT=$(cut -d'"' -f4 <<<"$BUILD_STATUS")
+BUILD_REPORT=$(cut -d',' -f4 <<<"$BUILD_STATUS")
+BUILD_REPORT=$(cut -d':' -f2 <<<"$BUILD_STATUS")
 BUILD_REPORT=$(echo $BUILD_REPORT | sed "s/\\\\//g")
 
 echo "Generate pipeline report ${REPORT_NAME}.html from URL ${BUILD_REPORT}"
 echo "<html><body style='margin:0px;padding:0px;overflow:hidden'><iframe src='${BUILD_REPORT}' frameborder='0' style='overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px' height='100%' width='100%'></iframe></body></html>" > ${REPORT_NAME}.html
 
-if [[ $BUILD_STATUS == *"FAILED"* ]];
+if [[ $BUILD_STATUS == *"\"status\":\"FAILED\""* ]];
 then
 	echo "Pipeline build failed!"
 	exit 1
