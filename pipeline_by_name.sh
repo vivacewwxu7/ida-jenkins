@@ -35,7 +35,7 @@ do
 done
 
 BUILD_REPORT=$(cut -d',' -f4 <<<"$BUILD_STATUS")
-BUILD_REPORT=$(cut -d':' -f2 <<<"$BUILD_REPORT")
+BUILD_REPORT=$(cut -d'"' -f4 <<<"$BUILD_REPORT")
 BUILD_REPORT=$(echo $BUILD_REPORT | sed "s/\\\\//g")
 
 echo "Generate pipeline report ${REPORT_NAME}.html from URL ${BUILD_REPORT}"
