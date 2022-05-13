@@ -14,20 +14,18 @@ if [ "$INTERVAL" = "" ] ; then
 	export INTERVAL=10
 fi;
 
-BUILD_RESULT=$(curl -X POST ${IDA_HOST}/rest/v1/pipeline/build/id?pipelineId=${PIPELINE_ID} -k --data-urlencode "userToken=${USER_TOKEN}")
+BUILD_RESULT=$(curl -X POST ${IDA_HOST}/rest/v1/pipeline/build/id?pipelineId=${PIPELINE_ID} -k -s --data-urlencode "userToken=${USER_TOKEN}")
 echo $BUILD_RESULT
 BUILD_ID="$(cut -d',' -f1 <<<"$BUILD_RESULT")"
 BUILD_ID="$(cut -d':' -f2 <<<"$BUILD_ID")"
 echo "The build id is $BUILD_ID"
 
 num=1
-
+echo "Waiting pipeline build to be completed..."
 until [ $num -lt 1 ]
 do
-    echo "Waiting for pipeline build"
 	sleep $INTERVAL
-	BUILD_STATUS=$(curl ${IDA_HOST}/rest/v1/pipeline/builds/${BUILD_ID} -k)
-	echo "The build status is $BUILD_STATUS"
+	BUILD_STATUS=$(curl ${IDA_HOST}/rest/v1/pipeline/builds/${BUILD_ID} -k -s)
 	if [[ $BUILD_STATUS != *"\"status\":\"RUNNING\""* ]];
 	then
 		break
