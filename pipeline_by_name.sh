@@ -35,7 +35,7 @@ do
 done
 
 echo "The pipeline build status is $BUILD_STATUS"
-BUILD_REPORT=$(cut -d',' -f4 <<<"$BUILD_STATUS")
+BUILD_REPORT=$(cut -d',' -f5 <<<"$BUILD_STATUS")
 BUILD_REPORT=$(cut -d'"' -f4 <<<"$BUILD_REPORT")
 BUILD_REPORT=$(echo $BUILD_REPORT | sed "s/\\\\//g")
 
