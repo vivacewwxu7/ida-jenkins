@@ -16,7 +16,7 @@ fi;
 
 BUILD_RESULT=$(curl -X POST ${IDA_HOST}/rest/v1/pipeline/build/id?pipelineId=${PIPELINE_ID} -k -s --data-urlencode "userToken=${USER_TOKEN}")
 echo $BUILD_RESULT
-BUILD_ID="$(cut -d',' -f1 <<<"$BUILD_RESULT")"
+BUILD_ID="$(cut -d',' -f3 <<<"$BUILD_RESULT")"
 BUILD_ID="$(cut -d':' -f2 <<<"$BUILD_ID")"
 echo "The build id is $BUILD_ID"
 
