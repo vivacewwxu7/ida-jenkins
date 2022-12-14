@@ -1,0 +1,11 @@
+stages:
+  - ida-pipeline
+
+image: centos
+
+ida-pipeline:
+  stage: ida-pipeline
+  script:
+    - echo "Trigger IDA Pipeline."
+    - chmod +x *.sh
+    - ./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -n "${PIPELINE_NAME}" -o pipeline

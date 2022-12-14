@@ -8,14 +8,14 @@ pipeline {
 		string(name: 'IDA_URL', defaultValue: params.IDA_URL ?:'https://localhost:8443/ida', description: 'The IDA URL')
 		string(name: 'IDA_USERNAME', defaultValue: params.IDA_USERNAME ?:'', description: 'The IDA Login Username')
 		password(name: 'IDA_PASSWORD', defaultValue: params.IDA_PASSWORD ?:'', description: 'The IDA Login Password')
-		string(name: 'PIPELINE_NAME', defaultValue: params.PIPELINE_NAME ?:'', description: 'The IDA pipeline Name')
+		string(name: 'PIPELINE_ID', defaultValue: params.PIPELINE_ID ?:'', description: 'The IDA pipeline Id, at least one of Pipeline Id and Pipeline Name is required.')
+		string(name: 'PIPELINE_NAME', defaultValue: params.PIPELINE_NAME ?:'', description: 'The IDA pipeline Name, at least one of Pipeline Id and Pipeline Name is required.')
 	}
 	
 	stages {
 	
-		stage('Preparation') {
+		stage('Clean Up') {
 			steps {
-				checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[credentialsId: 'gh-ssh-key', url: 'git@github.com:sdc-china/ida-jenkins.git']]]
 				sh '''
 				rm -rf *.html
 				'''
@@ -26,8 +26,9 @@ pipeline {
 			steps {
 				script {
 					try {
-						sh '''chmod +x pipeline_by_name_v2.sh
-						./pipeline_by_name_v2.sh "${IDA_URL}" "${PIPELINE_NAME}" "${IDA_USERNAME}" "${IDA_PASSWORD}" pipeline
+						sh '''
+						chmod +x pipeline.sh
+						./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -n "${PIPELINE_NAME}" -o pipeline
 						'''
 					} catch (e) {
 						echo "IDA Pipeline failed"
