@@ -80,8 +80,9 @@ else
 	do
 		sleep $INTERVAL
 		BUILD_RESULT=$(curl -u "${USERNAME}:${PASSWORD}" ${IDA_HOST}/rest/v2/pipelines/builds/${BUILD_ID} -k -s)
-		BUILD_STATUS=$(jq --argjson j "$BUILD_RESULT" -n '$j.status')
-		if [[ $BUILD_STATUS != *"\"RUNNING\""* ]];
+		BUILD_STATUS=$(jq -r --argjson j "$BUILD_RESULT" -n '$j.status')
+		BUILD_REPORT=$(jq -r --argjson j "$BUILD_RESULT" -n '$j.report')
+		if [[ $BUILD_STATUS != *"RUNNING"* ]];
 		then
 			break
 		else
@@ -90,11 +91,10 @@ else
 		num=`expr $num + 1`
 	done
 	echo "The pipeline build status is $BUILD_STATUS"
-	BUILD_REPORT=${IDA_HOST}/pipelines/${PIPELINE_ID}/builds/${BUILD_ID}?standalone=true
 	echo "Generate pipeline report ${OUTPUT_NAME}.html from URL ${BUILD_REPORT}"
 	echo "<html><body style='margin:0px;padding:0px;overflow:hidden'><iframe src='${BUILD_REPORT}' frameborder='0' style='overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px' height='100%' width='100%'></iframe></body></html>" > ${OUTPUT_NAME}.html
 	
-	if [[ $BUILD_STATUS == *"\"FAILED\""* ]];
+	if [[ $BUILD_STATUS == *"FAILED"* ]];
 	then
 		echo "Pipeline build failed!"
 		exit 1
