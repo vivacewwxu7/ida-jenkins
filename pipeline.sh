@@ -75,26 +75,24 @@ then
 	echo "Pipeline build failed due to null build id!"
 	exit 1
 else
-	num=1
-	until [ $num -lt 1 ]
+	while true
 	do
 		sleep $INTERVAL
 		BUILD_RESULT=$(curl -u "${USERNAME}:${PASSWORD}" ${IDA_HOST}/rest/v2/pipelines/builds/${BUILD_ID} -k -s)
 		BUILD_STATUS=$(jq -r --argjson j "$BUILD_RESULT" -n '$j.status')
 		BUILD_REPORT=$(jq -r --argjson j "$BUILD_RESULT" -n '$j.report')
-		if [[ $BUILD_STATUS != *"RUNNING"* ]];
+		if [[ $BUILD_STATUS != *"Running"* ]];
 		then
 			break
 		else
 			echo "The pipeline build is still running, Waiting it to be completed..."
 		fi
-		num=`expr $num + 1`
 	done
 	echo "The pipeline build status is $BUILD_STATUS"
 	echo "Generate pipeline report ${OUTPUT_NAME}.html from URL ${BUILD_REPORT}"
 	echo "<html><body style='margin:0px;padding:0px;overflow:hidden'><iframe src='${BUILD_REPORT}' frameborder='0' style='overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px' height='100%' width='100%'></iframe></body></html>" > ${OUTPUT_NAME}.html
 	
-	if [[ $BUILD_STATUS == *"FAILED"* ]];
+	if [[ $BUILD_STATUS == *"Failed"* ]];
 	then
 		echo "Pipeline build failed!"
 		exit 1
