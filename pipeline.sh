@@ -13,6 +13,7 @@ function show_help {
     echo "  -p  Required: The IDA Login Password"
     echo "  -i  Required: The IDA Pipeline Id, at least one of Pipeline Id and Pipeline Name is required."
     echo "  -n  Required: The IDA Pipeline Name, at least one of Pipeline Id and Pipeline Name is required."
+    echo "  -d  Optional: The IDA Pipeline Data."
     echo "  -o  Optional: The output HTML report name, the default name is 'index'"
 }
 
@@ -21,7 +22,7 @@ then
     show_help
     exit -1
 else
-    while getopts "h?s:u:p:i:n:o:" opt; do
+    while getopts "h?s:u:p:i:n:d:o:" opt; do
         case "$opt" in
         h|\?)
             show_help
@@ -37,6 +38,8 @@ else
             ;;
         n)  PIPELINE_NAME=$OPTARG
             ;;
+        d)  PIPELINE_DATA=$OPTARG
+            ;;
         o)  OUTPUT_NAME=$OPTARG
             ;;
         :)  echo "Invalid option: -$OPTARG requires an argument"
@@ -51,6 +54,10 @@ if [ -z ${OUTPUT_NAME} ]; then
 	OUTPUT_NAME="index"
 fi
 
+if [ -z ${PIPELINE_DATA} ]; then
+	PIPELINE_DATA="{}"
+fi
+
 if [[ -z ${IDA_HOST} || -z ${USERNAME} || -z ${PASSWORD} ]]; then
     echo "Missing required arguments!"
     show_help
@@ -58,9 +65,9 @@ if [[ -z ${IDA_HOST} || -z ${USERNAME} || -z ${PASSWORD} ]]; then
 fi
 
 if [ ! -z ${PIPELINE_ID} ]; then
-	BUILD_RESULT=$(curl -u "${USERNAME}:${PASSWORD}" -X POST "${IDA_HOST}/rest/v2/pipelines/builds?pipelineId=${PIPELINE_ID}" -k -s -d "{}"  -H "accept: application/json;charset=UTF-8" -H "Content-Type: application/json")
+	BUILD_RESULT=$(curl -u "${USERNAME}:${PASSWORD}" -X POST "${IDA_HOST}/rest/v2/pipelines/builds?pipelineId=${PIPELINE_ID}" -k -s -d "${PIPELINE_DATA}"  -H "accept: application/json;charset=UTF-8" -H "Content-Type: application/json")
 elif [ ! -z ${PIPELINE_NAME} ]; then
-	BUILD_RESULT=$(curl -u "${USERNAME}:${PASSWORD}" -X POST "${IDA_HOST}/rest/v2/pipelines/builds?pipelineName=${PIPELINE_NAME}" -k -s -d "{}"  -H "accept: application/json;charset=UTF-8" -H "Content-Type: application/json")
+	BUILD_RESULT=$(curl -u "${USERNAME}:${PASSWORD}" -X POST "${IDA_HOST}/rest/v2/pipelines/builds?pipelineName=${PIPELINE_NAME}" -k -s -d "${PIPELINE_DATA}"  -H "accept: application/json;charset=UTF-8" -H "Content-Type: application/json")
 else
 	echo "At least one of Pipeline Id and Pipeline Name is required."
 	exit -1
