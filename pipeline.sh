@@ -97,7 +97,7 @@ else
 	done
 	echo "The pipeline build status is $BUILD_STATUS"
 	echo "Generate pipeline report ${OUTPUT_NAME}.html from URL ${BUILD_REPORT}"
-	echo "<html><body style='margin:0px;padding:0px;overflow:hidden'><iframe src='${BUILD_REPORT}' frameborder='0' style='overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px' height='100%' width='100%'></iframe></body></html>" > ${OUTPUT_NAME}.html
+	echo "<html><body><a href='${BUILD_REPORT}'>View IDA Pipeline Report</a><script>window.location.href = '${BUILD_REPORT}';</script></body></html>" > ${OUTPUT_NAME}.html
 	
 	if [[ $BUILD_STATUS == *"Failed"* ]];
 	then
