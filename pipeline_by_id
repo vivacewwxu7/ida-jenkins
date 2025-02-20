@@ -7,8 +7,7 @@ pipeline {
 	parameters{
 		string(name: 'IDA_URL', defaultValue: params.IDA_URL ?:'https://localhost:8443/ida', description: 'The IDA URL')
 		string(name: 'IDA_LOGIN_CREDENTIAL', defaultValue: params.IDA_LOGIN_CREDENTIAL ?:'', description: 'The IDA Login Credential configured in Jenkins')
-		string(name: 'PIPELINE_ID', defaultValue: params.PIPELINE_ID ?:'', description: 'The IDA pipeline Id, at least one of Pipeline Id and Pipeline Name is required.')
-		string(name: 'PIPELINE_NAME', defaultValue: params.PIPELINE_NAME ?:'', description: 'The IDA pipeline Name, at least one of Pipeline Id and Pipeline Name is required.')
+		string(name: 'PIPELINE_ID', defaultValue: params.PIPELINE_ID ?:'', description: 'The IDA pipeline Id.')
 	}
 	
 	stages {
@@ -28,14 +27,7 @@ pipeline {
 						try {
 							sh '''
 							chmod +x pipeline.sh
-							if [ ! -z ${PIPELINE_ID} ]; then
-							  ./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -o pipeline
-							elif [ ! -z ${PIPELINE_NAME} ]; then
-							  ./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -n "${PIPELINE_NAME}" -o pipeline
-							else
-							  echo "At least one of Pipeline Id and Pipeline Name is required."
-							  exit -1
-							fi
+							./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -o pipeline
 							'''
 						} catch (e) {
 							echo "IDA Pipeline failed"
