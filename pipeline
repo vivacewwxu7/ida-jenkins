@@ -28,7 +28,14 @@ pipeline {
 						try {
 							sh '''
 							chmod +x pipeline.sh
-							./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -n "${PIPELINE_NAME}" -o pipeline
+							if [ ! -z ${PIPELINE_ID} ]; then
+							  ./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -o pipeline
+							elif [ ! -z ${PIPELINE_NAME} ]; then
+							  ./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -n "${PIPELINE_NAME}" -o pipeline
+							else
+							  echo "At least one of Pipeline Id and Pipeline Name is required."
+							  exit -1
+							fi
 							'''
 						} catch (e) {
 							echo "IDA Pipeline failed"
