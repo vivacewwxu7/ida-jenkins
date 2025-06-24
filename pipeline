@@ -9,6 +9,7 @@ pipeline {
 		string(name: 'IDA_LOGIN_CREDENTIAL', defaultValue: params.IDA_LOGIN_CREDENTIAL ?:'', description: 'The IDA Login Credential configured in Jenkins')
 		string(name: 'PIPELINE_ID', defaultValue: params.PIPELINE_ID ?:'', description: 'The IDA pipeline Id, at least one of Pipeline Id and Pipeline Name is required.')
 		string(name: 'PIPELINE_NAME', defaultValue: params.PIPELINE_NAME ?:'', description: 'The IDA pipeline Name, at least one of Pipeline Id and Pipeline Name is required.')
+                string(name: 'PIPELINE_DATA', defaultValue: params.PIPELINE_DATA ?:'', description: 'The IDA pipeline build input.')
 	}
 	
 	stages {
@@ -28,7 +29,7 @@ pipeline {
 						try {
 							sh '''
 							chmod +x pipeline.sh
-							./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -n "${PIPELINE_NAME}" -o pipeline
+							./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -n "${PIPELINE_NAME}" -d "${PIPELINE_DATA}" -o pipeline
 							'''
 						} catch (e) {
 							echo "IDA Pipeline failed"
