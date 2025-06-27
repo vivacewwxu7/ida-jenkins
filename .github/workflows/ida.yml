@@ -38,7 +38,7 @@ on:
         default: ''
         required: false
         type: string
-       PIPELINE_DATA:
+      PIPELINE_DATA:
         description: 'PIPELINE_DATA'
         default: ''
         required: false
@@ -61,4 +61,4 @@ jobs:
         run: |
           echo "Trigger IDA Pipeline."
           chmod +x *.sh
-          ./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -n "${PIPELINE_NAME}" -d "${PIPELINE_DATA}" -o pipeline
+          ./pipeline.sh -s ${{IDA_URL}} -u ${{IDA_USERNAME}} -p ${{IDA_PASSWORD}} -i ${{PIPELINE_ID}} -n ${{PIPELINE_NAME}} -d ${{PIPELINE_DATA}} -o pipeline
