@@ -18,6 +18,31 @@ on:
         default: 'https://ida-demo1.fyre.ibm.com:9443/ida'
         required: true
         type: string
+      IDA_USERNAME:
+        description: 'IDA_USERNAME'
+        default: 'idaAdmin'
+        required: true
+        type: string
+      IDA_PASSWORD:
+        description: 'IDA_PASSWORD'
+        default: 'idaAdmin'
+        required: true
+        type: string
+      PIPELINE_ID:
+        description: 'PIPELINE_ID'
+        default: '306'
+        required: false
+        type: string
+      PIPELINE_NAME:
+        description: 'PIPELINE_NAME'
+        default: ''
+        required: false
+        type: string
+       PIPELINE_DATA:
+        description: 'PIPELINE_DATA'
+        default: ''
+        required: false
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,5 +59,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo ${{ inputs.IDA_URL }},
-          echo test, and deploy your project.
+          echo "Trigger IDA Pipeline."
+          chmod +x *.sh
+          ./pipeline.sh -s "${IDA_URL}" -u "${IDA_USERNAME}" -p "${IDA_PASSWORD}" -i "${PIPELINE_ID}" -n "${PIPELINE_NAME}" -d "${PIPELINE_DATA}" -o pipeline
