@@ -32,14 +32,18 @@ else
 	    echo "$IDA_HOST"
             ;;
         u)  USERNAME=$OPTARG
+	    echo "$USERNAME"
             ;;
         p)  PASSWORD=$OPTARG
+	    echo "$PASSWORD"
             ;;
         i)  PIPELINE_ID=$OPTARG
+	    echo "$PIPELINE_ID"
             ;;
         n)  PIPELINE_NAME=$OPTARG
             ;;
         d)  PIPELINE_DATA=$OPTARG
+	    echo "$PIPELINE_DATA"
             ;;
         o)  OUTPUT_NAME=$OPTARG
             ;;
@@ -58,7 +62,7 @@ fi
 if [ -z ${PIPELINE_DATA} ]; then
 	PIPELINE_DATA="{}"
 fi
-
+echo "$PIPELINE_DATA"
 if [[ -z ${IDA_HOST} || -z ${USERNAME} || -z ${PASSWORD} ]]; then
     echo "Missing required arguments!"
     show_help
