@@ -29,6 +29,7 @@ else
             exit 0
             ;;
         s)  IDA_HOST=$OPTARG
+	    echo "$IDA_HOST"
             ;;
         u)  USERNAME=$OPTARG
             ;;
