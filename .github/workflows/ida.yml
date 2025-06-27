@@ -61,4 +61,4 @@ jobs:
         run: |
           echo "Trigger IDA Pipeline."
           chmod +x *.sh
-          ./pipeline.sh -s ${{IDA_URL}} -u ${{IDA_USERNAME}} -p ${{IDA_PASSWORD}} -i ${{PIPELINE_ID}} -n ${{PIPELINE_NAME}} -d ${{PIPELINE_DATA}} -o pipeline
+          ./pipeline.sh -s ${{inputs.IDA_URL}} -u ${{inputs.IDA_USERNAME}} -p ${{inputs.IDA_PASSWORD}} -i ${{inputs.PIPELINE_ID}} -n ${{inputs.PIPELINE_NAME}} -d ${{inputs.PIPELINE_DATA}} -o pipeline
